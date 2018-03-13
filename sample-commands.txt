@@ -1,3 +1,19 @@
+aws ec2 create-tags --resources i-0d5ffa01c386f0ce5 --tags Key=Name,Value=Processor
+
+aws ec2 describe-instances --filter 'Name=tag:Name,Values=Processor'
+
+aws ec2 describe-instances --filter 'Name=tag:Name,Values=Processor' --query 'Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.{VolumeId:VolumeId}'
+
+aws ec2 describe-instances --filters 'Name=tag:Name,Values=Processor' --query 'Reservations[0].Instances[0].InstanceId'
+
+aws ec2 stop-instances --instance-ids <instance-id>
+
+aws ec2 describe-instance-status --instance-id <instance-id>
+
+aws ec2 create-snapshot --volume-id <volume-id>
+
+
+
 Create instance and AMI
 
 aws ec2 run-instances --key-name <key-name> --instance-type t2.micro --image-id <ami-id> --user-data file://c:\temp\UserData.txt --security-group-ids <sg-id> --subnet-id <subnet-id> --associate-public-ip-address
