@@ -18,6 +18,85 @@ aws ec2 start-instances --instance-ids <instance-id>
 
 aws ec2 describe-instance-status --instance-id <instance-id>
 
+wget https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-3-storage-linux/scripts/loggen.sh
+
+chmod 740 loggen.sh
+
+./loggen.sh &
+
+tail timestamp.log
+
+aws s3 mv timestamp.log s3://<s3-bucket-name>/logfiles/timestamp-`date +"%m-%d-%Y-%H.%M.%S"`.log
+
+aws s3 mv timestamp.log s3://<s3-bucket-name>/logfiles/timestamp-`date +"%m-%d-%Y-%H.%M.%S"`.log
+
+aws s3 ls s3://<s3-bucket-name>
+
+aws s3 ls s3://<s3-bucket-name>/logfiles/
+
+aws s3 mv s3://<s3-bucket-name>/logfiles/<file-name> s3://<s3-bucket-name>/logfiles/archive/<file-name>
+
+aws s3 ls s3://<s3-bucket-name>/logfiles/
+
+Configuring Amazon Glacier Lifecycle Policy For logfiles
+
+rule name: /logfiles/archive
+filter prefix: /logfiles/archive
+
+previous version
+transition previous versions to glacier after 30 days
+expire previous versions after 120 days
+select Permanently delete previous version.
+
+Synchronize Files With Amazon S3
+
+wget https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-3-storage-linux/scripts/files.zip
+
+Hint based challenge
+
+- Activate versioning for your Amazon S3 bucket
+aws s3api put-bucket-versioning 
+
+- Use a single AWS CLI command to synchronize (sync) the contents of your unzipped folder with your Amazon S3 bucket
+
+aws s3 sync
+
+- To force Amazon S3 to delete any files not present on the local drive but present in Amazon S3, 
+
+use the `--delete` option to `aws s3 sync`
+
+- Recover the deleted file from Amazon S3 using versioning.
+
+- Because there is no direct command in Amazon S3 to restore an old version of a file, to download the old version of the deleted file from Amazon S3, 
+use the `aws s3api list-object-versions` and `aws s3api get-object` commands. 
+You can then restore the file to Amazon S3 by using another call to `aws s3 sync`.
+
+
+1.
+aws s3api put-bucket-versioning --bucket <s3-bucket-name> --versioning-configuration Status=Enabled
+
+aws s3 sync files s3://<s3-bucket-name>/files/
+
+aws s3 ls s3://<s3-bucket-name>/files/
+
+rm files/file1.txt
+
+aws s3 sync files s3://<s3-bucket-name>/files/ --delete
+
+aws s3 ls s3://<s3-bucket-name>/files/
+
+aws s3api list-object-versions --bucket <s3-bucket-name> --prefix files/file1.txt
+
+aws s3api get-object --bucket <s3-bucket-name> --key files/file1.txt --version-id <version-id> files/file1.txt
+
+ls files
+
+aws s3 sync files s3://<s3-bucket-name>/files/
+
+aws s3 ls s3://<s3-bucket-name>/files/
+
+Congratulations!!
+	
 Create instance and AMI
 
 aws ec2 run-instances --key-name <key-name> --instance-type t2.micro --image-id <ami-id> --user-data file://c:\temp\UserData.txt --security-group-ids <sg-id> --subnet-id <subnet-id> --associate-public-ip-address
