@@ -1,3 +1,5 @@
+https://s3.ap-south-1.amazonaws.com/training-artifacts-m/static-web.zip
+
 aws ec2 create-tags --resources i-0d5ffa01c386f0ce5 --tags Key=Name,Value=Processor
 
 aws ec2 describe-instances --filter 'Name=tag:Name,Values=Processor'
