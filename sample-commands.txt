@@ -1,3 +1,29 @@
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T03:00:05Z --value 87 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T03:00:10Z --value 51 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T03:00:15Z --value 125 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T03:00:20Z --value 235 --unit Milliseconds
+
+
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T04:00:00Z --value 87 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T04:00:00Z --value 51 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T04:00:00Z --value 125 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T04:00:00Z --value 235 --unit Milliseconds
+
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T05:00:00Z --statistic-values Sum=577,Minimum=65,Maximum=189,SampleCount=5 --unit Milliseconds
+
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--statistic-values Sum=806,Minimum=47,Maximum=328,SampleCount=6 --unit Milliseconds
+
+
 https://s3.ap-south-1.amazonaws.com/training-artifacts-m/static-web.zip
 
 aws ec2 create-tags --resources i-0d5ffa01c386f0ce5 --tags Key=Name,Value=Processor
