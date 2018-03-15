@@ -1,3 +1,31 @@
+Auto Scaleing User data
+
+<powershell>
+Set-ExecutionPolicy Unrestricted -Force
+New-Item -ItemType directory -Path 'C:\temp'
+
+# Install IIS and Web Management Tools.
+Import-Module ServerManager
+install-windowsfeature web-server, web-webserver -IncludeAllSubFeature
+install-windowsfeature web-mgmt-tools
+
+# Download the files for our web application.
+Set-Location -Path C:\inetpub\wwwroot
+
+$shell_app = new-object -com shell.application
+(New-Object System.Net.WebClient).DownloadFile("https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-6-scaling-windows/scripts/stressapp.zip", (Get-Location).Path + "\stressapp.zip")
+
+$zipfile = $shell_app.Namespace((Get-Location).Path + "\stressapp.zip")
+$destination = $shell_app.Namespace((Get-Location).Path)
+$destination.copyHere($zipfile.items())
+
+# Create the web app in IIS8.
+New-WebApplication -Name stressapp -PhysicalPath c:\inetpub\wwwroot\stressapp -Site "Default Web Site" -force
+
+# Download consume.exe for emulating load generation.
+(new-object net.webclient).DownloadFile('https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-6-scaling-windows/scripts/consume.exe', 'c:\temp\consume.exe')
+</powershell>
+
 aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
 --timestamp 2018-03-13T03:00:05Z --value 87 --unit Milliseconds
 aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
