@@ -1,3 +1,5 @@
+https://docs.google.com/spreadsheets/d/1r87wXwK1gpy91L6EHYpXus4TUE9ek3eyRCJtoIMaG_Y/edit?usp=sharing
+
 Lambda function to stop instances if the AutoOff tag is True.
 
 import boto3
