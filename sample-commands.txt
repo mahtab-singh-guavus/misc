@@ -1,3 +1,8 @@
+https://s3.amazonaws.com/kinesis-demo-bucket/amazon-kinesis-data-visualization-sample/kinesis-data-vis-sample-app.template
+
+
+
+
 https://docs.google.com/spreadsheets/d/1r87wXwK1gpy91L6EHYpXus4TUE9ek3eyRCJtoIMaG_Y/edit?usp=sharing
 
 Lambda function to stop instances if the AutoOff tag is True.
