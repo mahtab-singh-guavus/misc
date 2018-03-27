@@ -157,7 +157,8 @@
     "EIP" : {
       "Type" : "AWS::EC2::EIP",
       "Properties" : {
-        "InstanceId" : { "Ref" : "Ec2Instance" }
+        "InstanceId" : { "Ref" : "Ec2Instance" },
+        "Domain" : "vpc"
       }
     },
 
@@ -269,7 +270,6 @@
                                           "Arch" ] } ] },
         "InstanceType" : { "Ref" : "InstanceType" },
         "SubnetId" : { "Ref" : "SubnetId" },
-        "SecurityGroups" : [{ "Ref" : "Ec2SecurityGroup" }],
         "IamInstanceProfile": { "Ref": "RootInstanceProfile" },
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
           "#!/bin/bash\n",
