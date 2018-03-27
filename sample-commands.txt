@@ -1,3 +1,242 @@
+https://s3.amazonaws.com/kinesis-demo-bucket/amazon-kinesis-data-visualization-sample/kinesis-data-vis-sample-app.template
+
+
+
+
+https://docs.google.com/spreadsheets/d/1r87wXwK1gpy91L6EHYpXus4TUE9ek3eyRCJtoIMaG_Y/edit?usp=sharing
+
+Lambda function to stop instances if the AutoOff tag is True.
+
+import boto3
+import logging
+
+#setup simple logging for INFO
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+#define the connection
+ec2 = boto3.resource('ec2')
+
+def lambda_handler(event, context):
+    # Use the filter() method of the instances collection to retrieve
+    # all running EC2 instances.
+    filters = [{
+            'Name': 'tag:AutoOff',
+            'Values': ['True']
+        },
+        {
+            'Name': 'instance-state-name', 
+            'Values': ['running']
+        }
+    ]
+    
+    #filter the instances
+    instances = ec2.instances.filter(Filters=filters)
+
+    #locate all running instances
+    RunningInstances = [instance.id for instance in instances]
+    
+    #print the instances for logging purposes
+    #print RunningInstances 
+    
+    #make sure there are actually instances to shut down. 
+    if len(RunningInstances) > 0:
+        #perform the shutdown
+        shuttingDown = ec2.instances.filter(InstanceIds=RunningInstances).stop()
+        print shuttingDown
+    else:
+        print "Nothing to see here"
+        
+
+
+Stop instances that dont have a tag
+
+import boto3
+import logging
+
+#setup simple logging for INFO
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+#define the connection
+ec2 = boto3.resource('ec2')
+# open connection to ec2
+#conn = get_ec2_conn()
+
+# get a list of all instances
+all_instances = [i for i in ec2.instances.all()]
+
+def lambda_handler(event, context):
+
+    #instances = ec2.instances.filter(Filters=filters)
+    # get instances with filter of running + with tag `Name`
+    instances = [i for i in ec2.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': ['running']}, {'Name':'tag:AutoOff', 'Values':['False']}])]
+
+    # make a list of filtered instances IDs `[i.id for i in instances]`
+    # Filter from all instances the instance that are not in the filtered list
+    instances_to_delete = [to_del for to_del in all_instances if to_del.id not in [i.id for i in instances]]
+
+    # run over your `instances_to_delete` list and terminate each one of them
+    for instance in instances_to_delete:
+        instance.stop()
+
+        
+      
+Auto Scaleing User data
+
+<powershell>
+Set-ExecutionPolicy Unrestricted -Force
+New-Item -ItemType directory -Path 'C:\temp'
+
+# Install IIS and Web Management Tools.
+Import-Module ServerManager
+install-windowsfeature web-server, web-webserver -IncludeAllSubFeature
+install-windowsfeature web-mgmt-tools
+
+# Download the files for our web application.
+Set-Location -Path C:\inetpub\wwwroot
+
+$shell_app = new-object -com shell.application
+(New-Object System.Net.WebClient).DownloadFile("https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-6-scaling-windows/scripts/stressapp.zip", (Get-Location).Path + "\stressapp.zip")
+
+$zipfile = $shell_app.Namespace((Get-Location).Path + "\stressapp.zip")
+$destination = $shell_app.Namespace((Get-Location).Path)
+$destination.copyHere($zipfile.items())
+
+# Create the web app in IIS8.
+New-WebApplication -Name stressapp -PhysicalPath c:\inetpub\wwwroot\stressapp -Site "Default Web Site" -force
+
+# Download consume.exe for emulating load generation.
+(new-object net.webclient).DownloadFile('https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-6-scaling-windows/scripts/consume.exe', 'c:\temp\consume.exe')
+</powershell>
+
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T03:00:05Z --value 87 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T03:00:10Z --value 51 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T03:00:15Z --value 125 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T03:00:20Z --value 235 --unit Milliseconds
+
+
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T04:00:00Z --value 87 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T04:00:00Z --value 51 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T04:00:00Z --value 125 --unit Milliseconds
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T04:00:00Z --value 235 --unit Milliseconds
+
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--timestamp 2018-03-13T05:00:00Z --statistic-values Sum=577,Minimum=65,Maximum=189,SampleCount=5 --unit Milliseconds
+
+aws cloudwatch put-metric-data --metric-name RequestLatency --namespace GetStarted \
+--statistic-values Sum=806,Minimum=47,Maximum=328,SampleCount=6 --unit Milliseconds
+
+
+https://s3.ap-south-1.amazonaws.com/training-artifacts-m/static-web.zip
+
+aws ec2 create-tags --resources i-0d5ffa01c386f0ce5 --tags Key=Name,Value=Processor
+
+aws ec2 describe-instances --filter 'Name=tag:Name,Values=Processor'
+
+aws ec2 describe-instances --filter 'Name=tag:Name,Values=Processor' --query 'Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.{VolumeId:VolumeId}'
+
+aws ec2 describe-instances --filters 'Name=tag:Name,Values=Processor' --query 'Reservations[0].Instances[0].InstanceId'
+
+aws ec2 stop-instances --instance-ids <instance-id>
+
+aws ec2 describe-instance-status --instance-id <instance-id>
+
+aws ec2 create-snapshot --volume-id <volume-id>
+
+aws ec2 describe-snapshots --snapshot-id <snapshot-id>
+
+aws ec2 start-instances --instance-ids <instance-id>
+
+aws ec2 describe-instance-status --instance-id <instance-id>
+
+wget https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-3-storage-linux/scripts/loggen.sh
+
+chmod 740 loggen.sh
+
+./loggen.sh &
+
+tail timestamp.log
+
+aws s3 mv timestamp.log s3://<s3-bucket-name>/logfiles/timestamp-`date +"%m-%d-%Y-%H.%M.%S"`.log
+
+aws s3 mv timestamp.log s3://<s3-bucket-name>/logfiles/timestamp-`date +"%m-%d-%Y-%H.%M.%S"`.log
+
+aws s3 ls s3://<s3-bucket-name>
+
+aws s3 ls s3://<s3-bucket-name>/logfiles/
+
+aws s3 mv s3://<s3-bucket-name>/logfiles/<file-name> s3://<s3-bucket-name>/logfiles/archive/<file-name>
+
+aws s3 ls s3://<s3-bucket-name>/logfiles/
+
+Configuring Amazon Glacier Lifecycle Policy For logfiles
+
+rule name: /logfiles/archive
+filter prefix: /logfiles/archive
+
+previous version
+transition previous versions to glacier after 30 days
+expire previous versions after 120 days
+select Permanently delete previous version.
+
+Synchronize Files With Amazon S3
+
+wget https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-3-storage-linux/scripts/files.zip
+
+Hint based challenge
+
+- Activate versioning for your Amazon S3 bucket
+aws s3api put-bucket-versioning 
+
+- Use a single AWS CLI command to synchronize (sync) the contents of your unzipped folder with your Amazon S3 bucket
+
+aws s3 sync
+
+- To force Amazon S3 to delete any files not present on the local drive but present in Amazon S3, 
+
+use the `--delete` option to `aws s3 sync`
+
+- Recover the deleted file from Amazon S3 using versioning.
+
+- Because there is no direct command in Amazon S3 to restore an old version of a file, to download the old version of the deleted file from Amazon S3, 
+use the `aws s3api list-object-versions` and `aws s3api get-object` commands. 
+You can then restore the file to Amazon S3 by using another call to `aws s3 sync`.
+
+
+1.
+aws s3api put-bucket-versioning --bucket <s3-bucket-name> --versioning-configuration Status=Enabled
+
+aws s3 sync files s3://<s3-bucket-name>/files/
+
+aws s3 ls s3://<s3-bucket-name>/files/
+
+rm files/file1.txt
+
+aws s3 sync files s3://<s3-bucket-name>/files/ --delete
+
+aws s3 ls s3://<s3-bucket-name>/files/
+
+aws s3api list-object-versions --bucket <s3-bucket-name> --prefix files/file1.txt
+
+aws s3api get-object --bucket <s3-bucket-name> --key files/file1.txt --version-id <version-id> files/file1.txt
+
+ls files
+
+aws s3 sync files s3://<s3-bucket-name>/files/
+
+aws s3 ls s3://<s3-bucket-name>/files/
+
+Congratulations!!
+	
 Create instance and AMI
 
 aws ec2 run-instances --key-name <key-name> --instance-type t2.micro --image-id <ami-id> --user-data file://c:\temp\UserData.txt --security-group-ids <sg-id> --subnet-id <subnet-id> --associate-public-ip-address
