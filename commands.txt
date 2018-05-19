@@ -1,3 +1,5 @@
+https://s3-us-west-2.amazonaws.com/cloudformation-templates-us-west-2/AutoScalingMultiAZWithNotifications.template
+
 https://s3.amazonaws.com/kinesis-demo-bucket/amazon-kinesis-data-visualization-sample/kinesis-data-vis-sample-app.template
 
 
@@ -8,4 +10,9 @@ https://aws.amazon.com/blogs/big-data/building-and-maintaining-an-amazon-s3-meta
 Hive/EMR_GS
 
 https://amazon.qwiklabs.com/focuses/2988 (Redshift)
+
+
+http://www.sql-workbench.net/
+
+
 
