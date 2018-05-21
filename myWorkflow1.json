@@ -77,15 +77,15 @@
       "scheduleType": "CRON",
       "failureAndRerunMode": "CASCADE",
       "name": "Default",
-      "pipelineLogUri": "s3://dpoutputbucket/edp_logs",
+      "pipelineLogUri": "s3://dpoutputbucket1/edp_logs",
       "role": "DataPipelineDefaultRole",
       "resourceRole": "DataPipelineDefaultResourceRole",
       "myInputData": "s3://emr-workshop/data/input",
-      "myTransformedData": "s3://dpoutputbucket/data/output",
-      "myOutputData": "s3://dpoutputbucket/data/reports",
+      "myTransformedData": "s3://dpoutputbucket1/data/output",
+      "myOutputData": "s3://dpoutputbucket1/data/reports",
       "myPigScript": "s3://emr-workshop/scripts/pig_sample.pig",
       "myHiveScript": "s3://emr-workshop/scripts/hive_sample.q",
-      "myKeyPair": "mainkey1"
+      "myKeyPair": "test"
     },
     {
       "id": "mySchedule",
