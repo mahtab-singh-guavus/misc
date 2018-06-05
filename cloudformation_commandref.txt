@@ -1,0 +1,7 @@
+https://github.com/stelligent/cloudformation_templates
+
+http://templates.cloudonaut.io/en/stable/vpc/
+
+https://s3-eu-west-1.amazonaws.com/widdix-aws-cf-templates-releases-eu-west-1/stable/vpc/vpc-2azs.yaml
+
+
