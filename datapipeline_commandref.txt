@@ -1,0 +1,7 @@
+aws datapipeline create-pipeline --name myETLWorkflow --unique-id myETLWorkflow
+
+aws datapipeline put-pipeline-definition --pipeline-id df-XXXXXXXXXXX --pipeline-definition file://myWorkflow.json
+
+aws datapipeline activate-pipeline --pipeline-id df- XXXXXXXXXXX
+
+
