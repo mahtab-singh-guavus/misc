@@ -4,7 +4,7 @@ T-L1
 yum -y update
 yum -y install httpd php mysql php-mysql
 chkconfig httpd on
-/etc/init.d/httpd start
+service httpd start
 if [ ! -f /var/www/html/lab2-app.tar.gz ]; then
 cd /var/www/html
 wget https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-ESS/v4.1/lab-2-configure-website-datastore/scripts/lab2-app.tar.gz
@@ -18,7 +18,7 @@ T - L3
 yum -y update
 yum -y install httpd php mysql php-mysql
 chkconfig httpd on
-/etc/init.d/httpd start
+service httpd start
 if [ ! -f /var/www/html/lab2-app.tar.gz ]; then
 cd /var/www/html
 wget https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-ESS/v4.1/lab-2-configure-website-datastore/scripts/lab2-app.tar.gz
@@ -34,7 +34,7 @@ wget -q --tries=10 --timeout=20 http://google.com
 yum update -y
 yum -y install httpd php
 chkconfig httpd on
-/etc/init.d/httpd start
+service httpd start
 cd /var/www/html
 wget https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-1-compute-linux/scripts/ec2-info.zip
 unzip ec2-info.zip
@@ -61,7 +61,7 @@ S-L6 AutoScaling
 yum update -y --security
 yum -y install httpd php stress
 chkconfig httpd on
-/etc/init.d/httpd start
+service httpd start
 cd /var/www/html
 wget https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/AWS-100-SYS/v2.6/lab-6-scaling-linux/scripts/ec2-stress.zip
 unzip ec2-stress.zip
